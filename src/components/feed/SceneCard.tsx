@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SceneSpec } from '../../types/scene.ts'
+import { audioUrl } from '../../data/content.ts'
 import { SceneCanvas } from '../scene/SceneCanvas.tsx'
 
 interface SceneCardProps {
@@ -50,7 +51,12 @@ export function SceneCard({ scene, unmuted }: SceneCardProps) {
         {scene.subtitle && <p className="scene-card__subtitle">{scene.subtitle}</p>}
       </div>
 
-      {scene.audio && <audio ref={audioRef} src={scene.audio} preload="none" playsInline />}
+      <audio
+        ref={audioRef}
+        src={audioUrl(scene.topic, scene.audio ?? scene.id)}
+        preload="none"
+        playsInline
+      />
     </section>
   )
 }

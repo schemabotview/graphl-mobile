@@ -1,9 +1,0 @@
-How does one Kafka topic feed a whole team of consumers? Watch the flow.
-
-On the left, a producer. Its only job is to write records into a topic.
-
-But a topic isn't one line. It's split into partitions. The producer spreads records across all three, and inside each partition the order is kept.
-
-On the right, a consumer group shares the work. Consumer A reads the first two partitions, and consumer B takes the third.
-
-That's the trick. Add more partitions and more consumers, and the load just spreads wider, while every record still flows in order along its own path.

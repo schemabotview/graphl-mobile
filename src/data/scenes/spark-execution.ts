@@ -28,5 +28,5 @@ export const sparkExecution: SceneSpec = {
     { from: 'tasks', to: 'ex1' },
     { from: 'tasks', to: 'ex2' },
   ],
-  audio: '/content/apache-spark/audio/spark-execution.wav',
+  // audio stem defaults to id -> schemabotview/apache-spark/reels/spark-execution.wav
 }

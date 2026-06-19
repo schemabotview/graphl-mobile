@@ -10,7 +10,10 @@ export function Feed() {
 
   return (
     <div className="feed" onClick={() => setUnmuted(true)}>
-      <header className="feed__brand">GraphL</header>
+      <header className="feed__brand">
+        <img className="feed__brand-glyph" src="/icon.svg" alt="" />
+        <span className="feed__brand-name">GraphL</span>
+      </header>
 
       {scenes.map((scene) => (
         <SceneCard key={scene.id} scene={scene} unmuted={unmuted} />

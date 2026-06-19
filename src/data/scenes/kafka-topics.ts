@@ -30,5 +30,5 @@ export const kafkaTopics: SceneSpec = {
     { from: 'p1', to: 'c0' },
     { from: 'p2', to: 'c1' },
   ],
-  audio: '/content/apache-kafka/audio/kafka-topics.wav',
+  // audio stem defaults to id -> schemabotview/apache-kafka/reels/kafka-topics.wav
 }

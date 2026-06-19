@@ -47,24 +47,32 @@ emit it later (see Roadmap). Add a scene by creating
 Scene flow direction is inferred: `grid.cols > grid.rows` ⇒ horizontal handle
 placement (left→right), else vertical (top→bottom).
 
-### Audio / content convention (from the apache-spark repo)
+### Audio / content convention (decoupled from the app)
 
-Per topic under `public/content/<topic>/`:
-- `tts/<stem>.tts` — plain spoken prose (no markdown/code) for ChatterboxTTS.
-- `audio/<stem>.wav` — generated narration; **gitignored** (large binaries).
+Reel narration is **not bundled** with the app. It lives in the per-topic
+content repos (`schemabotview/<topic>`, same repos NodeMap uses) under `reels/`,
+and is fetched at runtime via raw GitHub URLs. This keeps `dist` tiny so the
+Pages deploy never times out on multi-MB audio.
 
-A scene's `audio` field points at `/content/<topic>/audio/<stem>.wav`. Audio
-autoplay is gesture-gated: the first tap on the feed unmutes the whole session.
+Per topic, in `~/Projects/<topic>/reels/` (the local clone):
+- `<stem>.tts` — plain spoken prose (no markdown/code) for ChatterboxTTS.
+- `<stem>.wav` — generated narration; **committed** here (served via raw).
 
-Generate `.wav` from `.tts` with local ChatterboxTTS (uses `mps` on Apple
-Silicon). Requires the `chatterbox` conda env:
+`src/data/content.ts#audioUrl(topic, stem)` resolves a scene to
+`https://raw.githubusercontent.com/schemabotview/<topic>/main/reels/<stem>.wav`.
+A scene's `audio` field is just the stem (defaults to `id`). Audio autoplay is
+gesture-gated: the first tap on the feed unmutes the whole session.
+
+Generate `.wav` from `.tts` with local ChatterboxTTS (`mps` on Apple Silicon),
+inside the `chatterbox` conda env. `CONTENT_ROOT` defaults to `~/Projects`:
 
 ```bash
-npm run audio                 # generate every public/content/*/tts/*.tts
-# or one file (must be inside the env):
-conda run -n chatterbox python scripts/generate_audio.py \
-  public/content/apache-kafka/tts/kafka-topics.tts --force
+npm run audio                                   # every <root>/*/reels/*.tts
+conda run -n chatterbox python scripts/generate_audio.py --topic apache-kafka
 ```
+
+After generating, **commit + push the .wav in the topic repo** so it serves via
+raw. (Large pushes can need to run on a real network, not a sandbox.)
 
 Target length per scene: 25–40s (~65–105 words) — one concept per scene.
 Blank lines in a `.tts` become 300 ms pauses, which also pace the node reveals.

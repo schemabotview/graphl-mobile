@@ -14,7 +14,20 @@
   left: 0;
   right: 0;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: calc(12px + env(safe-area-inset-top)) 20px 12px;
+  pointer-events: none;
+}
+
+.feed__brand-glyph {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.4));
+}
+
+.feed__brand-name {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -23,7 +36,6 @@
   background-clip: text;
   color: transparent;
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
 }
 
 .scene-card {

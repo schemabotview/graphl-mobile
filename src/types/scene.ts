@@ -44,6 +44,9 @@ export interface SceneSpec {
   grid: SceneGrid
   nodes: SceneNodeSpec[]
   edges: SceneEdgeSpec[]
-  /** Path to narration audio, e.g. /content/apache-kafka/audio/topics.wav */
+  /**
+   * Narration stem within the topic repo's reels/ folder. Resolved to a raw
+   * GitHub URL by `audioUrl(topic, audio)`. Defaults to `id` when omitted.
+   */
   audio?: string
 }
