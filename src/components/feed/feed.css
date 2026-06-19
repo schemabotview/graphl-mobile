@@ -80,6 +80,42 @@
   color: var(--muted);
 }
 
+.scene-card__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 6;
+  background: rgba(255, 255, 255, 0.18);
+}
+.scene-card__progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  transition: width 120ms linear;
+}
+
+.feed__playstate {
+  position: fixed;
+  right: 18px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #2a2d3d;
+  border-radius: 999px;
+  color: rgba(244, 245, 247, 0.92);
+  background: rgba(16, 18, 28, 0.7);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+.feed__playstate:active {
+  transform: scale(0.92);
+}
+
 .feed__tap-hint {
   position: fixed;
   inset: 0;

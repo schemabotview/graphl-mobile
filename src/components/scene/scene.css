@@ -43,3 +43,12 @@
 .react-flow__pane {
   background: transparent;
 }
+
+/* React Flow defaults the pane to `touch-action: none`, which swallows the
+   vertical swipe before it reaches the feed's scroll-snap container. The scene
+   is non-interactive (no pan/zoom), so let vertical scroll gestures pass. */
+.react-flow,
+.react-flow__renderer,
+.react-flow__pane {
+  touch-action: pan-y !important;
+}
