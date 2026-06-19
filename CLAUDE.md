@@ -56,6 +56,19 @@ Per topic under `public/content/<topic>/`:
 A scene's `audio` field points at `/content/<topic>/audio/<stem>.wav`. Audio
 autoplay is gesture-gated: the first tap on the feed unmutes the whole session.
 
+Generate `.wav` from `.tts` with local ChatterboxTTS (uses `mps` on Apple
+Silicon). Requires the `chatterbox` conda env:
+
+```bash
+npm run audio                 # generate every public/content/*/tts/*.tts
+# or one file (must be inside the env):
+conda run -n chatterbox python scripts/generate_audio.py \
+  public/content/apache-kafka/tts/kafka-topics.tts --force
+```
+
+Target length per scene: 25–40s (~65–105 words) — one concept per scene.
+Blank lines in a `.tts` become 300 ms pauses, which also pace the node reveals.
+
 ### A/V sync
 
 Currently **loose sync** (chosen for v1): when a card becomes active its visuals

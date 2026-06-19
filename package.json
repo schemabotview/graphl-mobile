@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "audio": "conda run --no-capture-output -n chatterbox python scripts/generate_audio.py --all"
   },
   "dependencies": {
     "@xyflow/react": "^12.3.5",
