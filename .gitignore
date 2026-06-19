@@ -11,9 +11,13 @@ dist-ssr
 
 # Editor
 .idea
+*.iml
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
+
+# Deploy script contains credentials — never commit
+deploy-app.sh
 
 # Env
 .env
