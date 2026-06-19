@@ -1,11 +1,11 @@
-Spark's execution model.
+How does one line of Spark code become work across a whole cluster? Follow it down.
 
-It starts at the top, with the driver. The driver is the brain of the job. It takes your code and builds a plan.
+It starts with the driver. The driver reads your code and builds a plan.
 
-That plan is a directed acyclic graph, a dag. Think of it as a map of every transformation, in the order they depend on one another.
+That plan is a directed acyclic graph, a dag. It maps every transformation in dependency order.
 
-Spark then cuts that map into stages. A stage is a run of work that can happen without shuffling data across the network. Here the plan splits into stage one and stage two.
+Spark slices that map into stages. A stage is work that runs without shuffling data over the network, so here the plan splits in two.
 
-Each stage becomes a set of tasks, and here is the important part: there is one task per partition of data. Tasks are the smallest unit of work.
+Each stage becomes tasks, with one task per partition of data. And those tasks drop onto the executors, the workers that run them in parallel.
 
-Finally those tasks are handed down to the executors. Executors are the workers out on the cluster, and they run the tasks in parallel. That is how a single line of code becomes work flowing across many machines.
+That's how a single command turns into work flowing across many machines.
