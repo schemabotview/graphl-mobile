@@ -1,0 +1,11 @@
+Spark's execution model.
+
+It starts at the top, with the driver. The driver is the brain of the job. It takes your code and builds a plan.
+
+That plan is a directed acyclic graph, a dag. Think of it as a map of every transformation, in the order they depend on one another.
+
+Spark then cuts that map into stages. A stage is a run of work that can happen without shuffling data across the network. Here the plan splits into stage one and stage two.
+
+Each stage becomes a set of tasks, and here is the important part: there is one task per partition of data. Tasks are the smallest unit of work.
+
+Finally those tasks are handed down to the executors. Executors are the workers out on the cluster, and they run the tasks in parallel. That is how a single line of code becomes work flowing across many machines.

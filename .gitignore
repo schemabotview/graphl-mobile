@@ -1,0 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+
+# Editor
+.idea
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Generated audio (large binaries live in public/content/<topic>/audio)
+public/content/**/audio/*.wav

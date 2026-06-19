@@ -1,0 +1,45 @@
+.scene-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border: 2px solid var(--node-color, #9aa3b2);
+  border-radius: 14px;
+  background: rgba(16, 18, 28, 0.85);
+  text-align: center;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 0 18px -6px var(--node-color, #9aa3b2);
+}
+
+/* 'term' nodes are filled chips whose text IS the concept. */
+.scene-node--term {
+  background: color-mix(in srgb, var(--node-color) 22%, #10121c);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.scene-node__label {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #f4f5f7;
+}
+
+.scene-node__sub {
+  font-size: 11px;
+  color: var(--muted, #9aa3b2);
+}
+
+/* Handles are anchor points only; hide the visible dots. */
+.scene-handle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* React Flow surface should be transparent so the dark card shows through. */
+.react-flow,
+.react-flow__renderer,
+.react-flow__pane {
+  background: transparent;
+}

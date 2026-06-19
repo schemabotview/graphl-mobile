@@ -1,0 +1,9 @@
+How a Kafka topic flows.
+
+Picture a producer on the left. Its only job is to write records, one after another, into a topic.
+
+But a topic is not a single line. It is split into partitions. Here we have three of them, stacked in the middle. The producer spreads its records across these partitions, and within each partition the order is kept.
+
+Now look to the right. A consumer group reads from the topic. The key insight here is that the partitions are shared out among the consumers in the group. Consumer A pulls from the first two partitions, and consumer B takes the third.
+
+This is how Kafka scales. Add more partitions and more consumers, and the work simply spreads wider, while every record still flows in order along its own path.
