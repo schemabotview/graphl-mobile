@@ -2,15 +2,15 @@
 Generate reel narration .wav from .tts using ChatterboxTTS (local).
 
 Reel content lives in the per-topic content repos, not in this app:
-    <CONTENT_ROOT>/<topic>/reels/<stem>.tts  ->  <CONTENT_ROOT>/<topic>/reels/<stem>.wav
+    <CONTENT_ROOT>/<topic>-reels/tts/<stem>.tts  ->  <CONTENT_ROOT>/<topic>-reels/audio/<stem>.wav
 
-CONTENT_ROOT defaults to ~/Projects (where the topic repos are cloned); override
-with the GRAPHL_CONTENT_ROOT env var. After generating, commit + push the .wav
-in the topic repo so it serves via raw.githubusercontent.com.
+CONTENT_ROOT defaults to ~/Apps (where the <topic>-reels repos are cloned);
+override with the GRAPHL_CONTENT_ROOT env var. After generating, commit + push the
+.wav in the topic repo so it serves via raw.githubusercontent.com.
 
 Usage (inside the `chatterbox` conda env):
-    python scripts/generate_audio.py --all                 # every <root>/*/reels/*.tts
-    python scripts/generate_audio.py --topic apache-kafka  # one topic
+    python scripts/generate_audio.py --all                 # every <root>/*-reels/tts/*.tts
+    python scripts/generate_audio.py --topic apache-kafka  # one topic (-> apache-kafka-reels)
     python scripts/generate_audio.py /abs/path/to/x.tts --force
 """
 
@@ -24,7 +24,7 @@ import torch
 import torchaudio as ta
 from chatterbox.tts import ChatterboxTTS
 
-CONTENT_ROOT = Path(os.environ.get("GRAPHL_CONTENT_ROOT", Path.home() / "Projects"))
+CONTENT_ROOT = Path(os.environ.get("GRAPHL_CONTENT_ROOT", Path.home() / "Apps"))
 MAX_CHUNK = 300
 
 
@@ -71,7 +71,9 @@ def rel(p: Path) -> str:
 
 
 def generate(tts_file: Path, model, device: str, force: bool) -> None:
-    dest = tts_file.with_suffix(".wav")  # sibling .wav in the same reels/ dir
+    # .tts lives in <repo>/tts/; the generated .wav goes to the sibling <repo>/audio/
+    dest = tts_file.parent.parent / "audio" / f"{tts_file.stem}.wav"
+    dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists() and not force:
         print(f"Already exists: {rel(dest)}  (use --force)")
         return
@@ -103,15 +105,15 @@ def generate(tts_file: Path, model, device: str, force: bool) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate reel narration with ChatterboxTTS")
     parser.add_argument("tts_file", nargs="?", type=Path, help="Path to a .tts file")
-    parser.add_argument("--topic", help="Topic repo name under CONTENT_ROOT, e.g. apache-kafka")
-    parser.add_argument("--all", action="store_true", help="Every <root>/*/reels/*.tts")
+    parser.add_argument("--topic", help="Topic name, e.g. apache-kafka (-> apache-kafka-reels)")
+    parser.add_argument("--all", action="store_true", help="Every <root>/*-reels/tts/*.tts")
     parser.add_argument("--force", action="store_true", help="Regenerate even if the .wav exists")
     args = parser.parse_args()
 
     if args.all:
-        targets = sorted(CONTENT_ROOT.glob("*/reels/*.tts"))
+        targets = sorted(CONTENT_ROOT.glob("*-reels/tts/*.tts"))
     elif args.topic:
-        targets = sorted((CONTENT_ROOT / args.topic / "reels").glob("*.tts"))
+        targets = sorted((CONTENT_ROOT / f"{args.topic}-reels" / "tts").glob("*.tts"))
     elif args.tts_file:
         targets = [args.tts_file.resolve()]
     else:

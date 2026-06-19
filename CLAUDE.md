@@ -50,24 +50,27 @@ placement (left→right), else vertical (top→bottom).
 ### Audio / content convention (decoupled from the app)
 
 Reel narration is **not bundled** with the app. It lives in the per-topic
-content repos (`schemabotview/<topic>`, same repos NodeMap uses) under `reels/`,
-and is fetched at runtime via raw GitHub URLs. This keeps `dist` tiny so the
-Pages deploy never times out on multi-MB audio.
+content repos (`schemabotview/<topic>-reels`, e.g. `apache-spark-reels`), and is
+fetched at runtime via raw GitHub URLs. This keeps `dist` tiny so the Pages
+deploy never times out on multi-MB audio.
 
-Per topic, in `~/Projects/<topic>/reels/` (the local clone):
-- `<stem>.tts` — plain spoken prose (no markdown/code) for ChatterboxTTS.
-- `<stem>.wav` — generated narration; **committed** here (served via raw).
+Each `<topic>-reels` repo has three folders, keyed by a shared `<stem>` per reel:
+- `scenes/<stem>.ts` — authored SceneSpec data (the app currently bundles its
+  own copies in `src/data/scenes/`; this folder is the content home).
+- `tts/<stem>.tts` — plain spoken prose (no markdown/code) for ChatterboxTTS.
+- `audio/<stem>.wav` — generated narration; **committed** here (served via raw).
 
 `src/data/content.ts#audioUrl(topic, stem)` resolves a scene to
-`https://raw.githubusercontent.com/schemabotview/<topic>/main/reels/<stem>.wav`.
-A scene's `audio` field is just the stem (defaults to `id`). Audio autoplay is
-gesture-gated: the first tap on the feed unmutes the whole session.
+`https://raw.githubusercontent.com/schemabotview/<topic>-reels/main/audio/<stem>.wav`.
+A scene's `audio` field is just the stem (defaults to `id`); `topic` is the bare
+topic (e.g. `apache-spark`) and `-reels` is appended to get the repo. Audio
+autoplay is gesture-gated: the first tap on the feed unmutes the whole session.
 
 Generate `.wav` from `.tts` with local ChatterboxTTS (`mps` on Apple Silicon),
-inside the `chatterbox` conda env. `CONTENT_ROOT` defaults to `~/Projects`:
+inside the `chatterbox` conda env. `CONTENT_ROOT` defaults to `~/Apps`:
 
 ```bash
-npm run audio                                   # every <root>/*/reels/*.tts
+npm run audio                                   # every <root>/*-reels/tts/*.tts
 conda run -n chatterbox python scripts/generate_audio.py --topic apache-kafka
 ```
 
@@ -86,8 +89,8 @@ touching the feed.
 
 ## Roadmap
 
-- **Now:** hand-author scenes + `.tts`, generate `.wav` via the existing
-  ChatterboxTTS Colab flow, drop into `public/content/<topic>/audio/`.
+- **Now:** hand-author scenes + `.tts` in the `<topic>-reels` repo, generate
+  `.wav` via local ChatterboxTTS, then commit + push so it serves via raw.
 - **Later:** `scripts/generate-scene.ts` — topic prompt → Claude (Opus 4.8)
   emits `SceneSpec` JSON + `.tts` → batch TTS → feed entry.
 - **Later:** Capacitor wrapper for app-store distribution (codebase stays as-is).
@@ -95,4 +98,5 @@ touching the feed.
 ## Reference projects
 
 - `~/Projects/NodeMap` — origin of the grid scene format + layout resolver (3D/R3F).
-- `~/Projects/apache-spark` — origin of the tts/audio content pipeline conventions.
+- `~/Apps/<topic>-reels` — per-topic content repos (scenes/tts/audio); see
+  `apache-spark-reels`, `apache-kafka-reels`.

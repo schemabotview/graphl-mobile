@@ -45,8 +45,8 @@ export interface SceneSpec {
   nodes: SceneNodeSpec[]
   edges: SceneEdgeSpec[]
   /**
-   * Narration stem within the topic repo's reels/ folder. Resolved to a raw
-   * GitHub URL by `audioUrl(topic, audio)`. Defaults to `id` when omitted.
+   * Narration stem within the `<topic>-reels` repo's audio/ folder. Resolved to
+   * a raw GitHub URL by `audioUrl(topic, audio)`. Defaults to `id` when omitted.
    */
   audio?: string
 }
