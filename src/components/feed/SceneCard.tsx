@@ -19,6 +19,8 @@ export function SceneCard({ scene, unmuted, paused }: SceneCardProps) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [active, setActive] = useState(false)
   const [progress, setProgress] = useState(0)
+  // Whether the tab/app is foregrounded; minimizing must silence the narration.
+  const [visible, setVisible] = useState(() => !document.hidden)
 
   useEffect(() => {
     const el = cardRef.current
@@ -31,17 +33,26 @@ export function SceneCard({ scene, unmuted, paused }: SceneCardProps) {
     return () => io.disconnect()
   }, [])
 
+  // Backgrounding the app (home button / app switcher) doesn't change active /
+  // unmuted / paused, so without this the <audio> keeps playing. Track page
+  // visibility and feed it into the play/pause effect below.
+  useEffect(() => {
+    const onChange = () => setVisible(!document.hidden)
+    document.addEventListener('visibilitychange', onChange)
+    return () => document.removeEventListener('visibilitychange', onChange)
+  }, [])
+
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
-    if (active && unmuted && !paused) {
+    if (active && unmuted && !paused && visible) {
       audio.play().catch(() => {
         /* autoplay can still be blocked; ignored, visuals continue */
       })
     } else {
       audio.pause()
     }
-  }, [active, unmuted, paused])
+  }, [active, unmuted, paused, visible])
 
   // Restart narration from the top each time the card (re)activates, but keep
   // position when merely tap-paused so resuming continues where it left off.
