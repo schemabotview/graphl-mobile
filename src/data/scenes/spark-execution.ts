@@ -93,7 +93,7 @@ const layout = stack(
 export const sparkExecution: SceneSpec = {
   id: 'spark-execution',
   topic: 'apache-spark',
-  title: "Spark's batch processing",
+  title: 'Spark Execution Model',
   subtitle: 'Driver → Catalyst → Tungsten → DAG → executors',
   ...layout,
   edges: [

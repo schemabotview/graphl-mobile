@@ -56,7 +56,7 @@ const layout = stack(
 export const sparkApiStack: SceneSpec = {
   id: 'apache-spark-api-stack',
   topic: 'apache-spark',
-  title: 'The Spark batch API stack',
+  title: 'The Spark API stack',
   subtitle: 'Input → Read → RDD / DataFrame / SQL / pandas → Write → Output',
   ...layout,
   edges: [
