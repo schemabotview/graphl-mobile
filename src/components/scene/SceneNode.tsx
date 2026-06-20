@@ -42,6 +42,10 @@ export function SceneNode({ data }: NodeProps) {
       {d.kind !== 'group' && <span className="scene-node__label">{d.label}</span>}
       {d.kind !== 'group' && d.sub && <span className="scene-node__sub">{d.sub}</span>}
       <Handle type="source" position={sourcePos} className="scene-handle" isConnectable={false} />
+      {/* Extra side handles (id'd) for loop/feedback edges; the id-less handles
+          above stay the default for normal flow edges. */}
+      <Handle type="source" id="r-source" position={Position.Right} className="scene-handle" isConnectable={false} />
+      <Handle type="target" id="r-target" position={Position.Right} className="scene-handle" isConnectable={false} />
     </motion.div>
   )
 }

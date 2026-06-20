@@ -85,6 +85,8 @@ export const sparkStructuredStreaming: SceneSpec = {
     { from: 'ss-process', to: 'ss-state' },
     { from: 'ss-state', to: 'ss-sink' },
     { from: 'ss-sink', to: 'ss-checkpoint' },
-    { from: 'ss-checkpoint', to: 'ss-offset', label: 'next micro-batch' },
+    // Loop back to the top via the right-side handles so it routes down the
+    // margin (a step path) instead of straight up through the boxes.
+    { from: 'ss-checkpoint', to: 'ss-offset', sourceHandle: 'r-source', targetHandle: 'r-target' },
   ],
 }

@@ -36,6 +36,13 @@ export interface SceneEdgeSpec {
   color?: string
   /** Animate "flow in path" along this edge. Defaults to true. */
   animated?: boolean
+  /**
+   * Optional node-handle ids to route through (React Flow). Omit for normal
+   * flow (uses the default top/bottom handles). Set both to 'r-source' /
+   * 'r-target' for a loop/feedback edge that routes down the right side.
+   */
+  sourceHandle?: string
+  targetHandle?: string
 }
 
 export interface SceneGrid {

@@ -67,6 +67,8 @@ export function SceneCanvas({ scene, active }: { scene: SceneSpec; active: boole
         id: `${e.from}-${e.to}-${i}`,
         source: e.from,
         target: e.to,
+        sourceHandle: e.sourceHandle,
+        targetHandle: e.targetHandle,
         type: 'flow',
         label: e.label,
         data: { color: e.color ?? GRAY, animated: e.animated },
