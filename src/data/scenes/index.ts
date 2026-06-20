@@ -11,6 +11,7 @@ import { sparkCachePersist } from './spark-cache-persist.ts'
 import { sparkPerformanceTuning } from './spark-performance-tuning.ts'
 import { sparkStructuredStreaming } from './spark-structured-streaming.ts'
 import { sparkExecution } from './spark-execution.ts'
+import { sparkWindowing } from './spark-windowing.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -26,4 +27,5 @@ export const scenes: SceneSpec[] = [
   sparkCachePersist,
   sparkPerformanceTuning,
   sparkStructuredStreaming,
+  sparkWindowing,
 ]
