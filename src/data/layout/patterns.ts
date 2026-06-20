@@ -208,3 +208,27 @@ export function stack(bands: StackBand[], opts: PatternOpts & { cols?: number } 
   }
   return { grid: { cols, rows: row, ...gridOpts }, nodes }
 }
+
+/** A leaf term-chip seed for `section` (id + label, optional color/sub). */
+export interface Chip {
+  id: string
+  label: string
+  color?: string
+  sub?: string
+}
+
+/**
+ * A titled box holding bands of term-chips — the shared grammar for the API
+ * cheat-sheet reels (each box mirrors one colored box from the reference
+ * diagram). Each inner array is one row of chips; chips inherit `meta.color`
+ * unless they set their own. Rows are `tight` because chips carry full API
+ * labels. Returns a `container` node, so drop it straight into a `stack` band
+ * or another container's content for two-level nesting (box ⊃ sub-box ⊃ chip).
+ */
+export function section(meta: ContainerMeta, bands: Chip[][], opts: WrapOpts = {}): SceneNodeSpec {
+  const content = rows(
+    bands.map((band) => band.map((c) => ({ color: meta.color, ...c, kind: 'term' as const }))),
+    { tight: true },
+  )
+  return container(meta, content, opts)
+}
