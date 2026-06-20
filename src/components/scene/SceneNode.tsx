@@ -6,7 +6,7 @@ export interface SceneNodeData {
   label: string
   sub?: string
   color: string
-  kind: 'symbol' | 'term'
+  kind: 'symbol' | 'term' | 'container'
   /** Dominant flow direction of the scene, sets handle placement. */
   direction: 'horizontal' | 'vertical'
   /** Stagger order for the entrance animation. */

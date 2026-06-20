@@ -19,6 +19,23 @@
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
 }
 
+/* 'container' nodes are titled boxes that group other nodes drawn on top of
+   them. The title pins to the top so the body is free for the children. */
+.scene-node--container {
+  justify-content: flex-start;
+  padding: 10px 12px;
+  border-style: dashed;
+  background: color-mix(in srgb, var(--node-color) 8%, rgba(16, 18, 28, 0.6));
+  box-shadow: none;
+}
+
+.scene-node--container .scene-node__label {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--node-color);
+}
+
 .scene-node__label {
   font-size: 15px;
   font-weight: 600;

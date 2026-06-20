@@ -3,7 +3,7 @@
 // free of rendering concerns. Nodes are placed on a grid by `cell` coordinates
 // (NodeMap convention); the layout engine resolves cells -> pixel positions.
 
-export type NodeKind = 'symbol' | 'term'
+export type NodeKind = 'symbol' | 'term' | 'container'
 
 export interface SceneNodeSpec {
   id: string
@@ -11,7 +11,11 @@ export interface SceneNodeSpec {
   /** [col, row, colSpan?, rowSpan?] within the scene's grid. */
   cell: [number, number, number?, number?]
   color?: string
-  /** 'term' = filled chip whose text IS the concept; 'symbol' = labelled node. */
+  /**
+   * 'term' = filled chip whose text IS the concept; 'symbol' = labelled node;
+   * 'container' = titled box that visually groups other nodes placed on top of
+   * it (its label sits at the top so children can occupy the body).
+   */
   kind?: NodeKind
   /** Optional smaller caption under the label. */
   sub?: string
