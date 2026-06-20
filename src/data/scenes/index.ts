@@ -5,6 +5,7 @@ import { sparkRddApi } from './spark-rdd-api.ts'
 import { sparkDataframeApi } from './spark-dataframe-api.ts'
 import { sparkSqlApi } from './spark-sql-api.ts'
 import { sparkPandasApi } from './spark-pandas-api.ts'
+import { sparkReadingSources } from './spark-reading-sources.ts'
 import { sparkExecution } from './spark-execution.ts'
 
 // The feed order. Add new scenes here.
@@ -15,5 +16,6 @@ export const scenes: SceneSpec[] = [
   sparkDataframeApi,
   sparkSqlApi,
   sparkPandasApi,
+  sparkReadingSources,
   sparkExecution,
 ]
