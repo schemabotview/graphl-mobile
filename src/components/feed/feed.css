@@ -21,10 +21,34 @@
   pointer-events: none;
 }
 
+.feed__home {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  /* The brand bar ignores pointer events; re-enable them just on the logo. */
+  pointer-events: auto;
+}
+.feed__home:active {
+  transform: scale(0.96);
+}
+
 .feed__brand-glyph {
   width: 24px;
   height: 24px;
   filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.4));
+}
+
+.feed__topic {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 
 .feed__brand-name {

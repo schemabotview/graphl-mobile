@@ -1,9 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { scenes } from '../../data/scenes/index.ts'
+import { topicMeta } from '../../data/topics.ts'
+import { navigate } from '../../router.ts'
 import { SceneCard } from './SceneCard.tsx'
 import './feed.css'
 
-export function Feed() {
+interface FeedProps {
+  /** Only reels for this topic are shown. */
+  topic: string
+}
+
+export function Feed({ topic }: FeedProps) {
+  // This feed is scoped to a single topic; the index page picks which one.
+  const topicScenes = useMemo(
+    () => scenes.filter((s) => s.topic === topic),
+    [topic],
+  )
+
   // Browsers block audio autoplay until a user gesture. The first tap unlocks
   // sound for the whole feed (standard reels pattern); later taps toggle
   // play/pause on the active scene.
@@ -36,11 +49,23 @@ export function Feed() {
   return (
     <div className="feed" onClick={onTap}>
       <header className="feed__brand">
-        <img className="feed__brand-glyph" src="/icon.svg" alt="" />
-        <span className="feed__brand-name">GraphL</span>
+        <button
+          type="button"
+          className="feed__home"
+          aria-label="Back to all concepts"
+          onClick={(e) => {
+            // Don't let the tap also toggle play/pause on the feed.
+            e.stopPropagation()
+            navigate('')
+          }}
+        >
+          <img className="feed__brand-glyph" src="/icon.svg" alt="" />
+          <span className="feed__brand-name">GraphL</span>
+        </button>
+        <span className="feed__topic">{topicMeta(topic).label}</span>
       </header>
 
-      {scenes.map((scene) => (
+      {topicScenes.map((scene) => (
         <SceneCard
           key={scene.id}
           scene={scene}

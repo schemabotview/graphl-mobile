@@ -15,6 +15,7 @@ import { sparkExecution } from './spark-execution.ts'
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
   kafkaTopics,
+  sparkExecution,
   sparkApiStack,
   sparkRddApi,
   sparkDataframeApi,
@@ -24,6 +25,5 @@ export const scenes: SceneSpec[] = [
   sparkWritingSinks,
   sparkCachePersist,
   sparkPerformanceTuning,
-  sparkExecution,
   sparkStructuredStreaming,
 ]
