@@ -12,7 +12,7 @@ export function FlowEdge(props: EdgeProps) {
   const { id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data, markerEnd } = props
   const geo = { sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }
   const [path] = sourcePosition === targetPosition
-    ? getSmoothStepPath({ ...geo, borderRadius: 14 })
+    ? getSmoothStepPath({ ...geo, borderRadius: 14, offset: 64 })
     : getBezierPath(geo)
 
   const color = (data?.color as string) ?? GRAY
