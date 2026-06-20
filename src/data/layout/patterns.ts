@@ -26,6 +26,8 @@ export interface PatternOpts {
   gap?: number
   /** Override grid padding (grid units). */
   padding?: number
+  /** Drop the empty gap lanes between items, giving each chip ~2× the width. */
+  tight?: boolean
 }
 
 function withCell(seed: NodeSeed, cell: SceneNodeSpec['cell']): SceneNodeSpec {
@@ -33,46 +35,56 @@ function withCell(seed: NodeSeed, cell: SceneNodeSpec['cell']): SceneNodeSpec {
 }
 
 // In this app a node fills its cell, so nodes must stay 1×1 to read as compact
-// chips — spanning to "center" would balloon them. Instead we lay nodes on a
-// sparse grid with an empty lane between every node and every stage, and center
-// a short stage by leaving empty leading rows. With N items a track needs
-// 2N-1 cells (item, gap, item, …); a stage of k items inside `len` cells starts
-// at `(len - (2k-1)) / 2` (always integer: both terms are odd, so the gap is
-// even). This reproduces a clean hand-authored layout exactly.
-const trackLen = (count: number) => Math.max(2 * count - 1, 1)
-const startOffset = (len: number, count: number) => (len - (2 * count - 1)) / 2
+// chips — spanning to "center" would balloon them. By default we lay nodes on a
+// sparse grid with an empty lane between every node and every stage (so a stage
+// reads as small chips with breathing room) and center a short stage by leaving
+// empty leading rows. With N items a track needs 2N-1 cells (item, gap, item, …)
+// and a stage of k items inside `len` cells starts at `(len - (2k-1)) / 2`.
+//
+// `tight` drops the empty lanes (track = N cells, items adjacent), so each chip
+// gets ~2× the width. Use it when labels are long and need the room — the
+// grid's own `gap` still separates adjacent cells, so chips don't touch.
+const trackLen = (count: number, tight: boolean) =>
+  Math.max(tight ? count : 2 * count - 1, 1)
+const trackStep = (tight: boolean) => (tight ? 1 : 2)
+const startOffset = (len: number, count: number, tight: boolean) =>
+  Math.floor((len - trackLen(count, tight)) / 2)
 
 /**
  * Multi-column flow, left → right (e.g. producer → partitions → consumers).
- * Each inner array is one column laid out top-to-bottom. Stages sit in alternate
- * columns (gap lanes between them) and shorter stages are vertically centered,
- * so every node stays a compact 1×1 chip and nothing overlaps.
+ * Each inner array is one column laid out top-to-bottom; shorter stages are
+ * vertically centered so nothing overlaps. `tight` removes the gap lanes for
+ * wider chips (see the note above).
  */
 export function columns(stages: NodeSeed[][], opts: PatternOpts = {}): PatternResult {
+  const { tight = false, ...gridOpts } = opts
+  const step = trackStep(tight)
   const maxCount = Math.max(...stages.map((s) => s.length), 1)
-  const cols = trackLen(stages.length)
-  const rows = trackLen(maxCount)
+  const cols = trackLen(stages.length, tight)
+  const rows = trackLen(maxCount, tight)
   const nodes = stages.flatMap((stage, s) => {
-    const offset = startOffset(rows, stage.length)
-    return stage.map((seed, i) => withCell(seed, [2 * s, offset + 2 * i]))
+    const offset = startOffset(rows, stage.length, tight)
+    return stage.map((seed, i) => withCell(seed, [step * s, offset + step * i]))
   })
-  return { grid: { cols, rows, ...opts }, nodes }
+  return { grid: { cols, rows, ...gridOpts }, nodes }
 }
 
 /**
  * Multi-row flow, top → bottom — the transpose of `columns`. Each inner array
- * is one horizontal band (e.g. inputs band, then a transform band, then
- * outputs), bands sit in alternate rows and shorter bands are centered.
+ * is one horizontal band; shorter bands are centered. `tight` removes the gap
+ * lanes for wider chips.
  */
 export function rows(bands: NodeSeed[][], opts: PatternOpts = {}): PatternResult {
+  const { tight = false, ...gridOpts } = opts
+  const step = trackStep(tight)
   const maxCount = Math.max(...bands.map((b) => b.length), 1)
-  const rows = trackLen(bands.length)
-  const cols = trackLen(maxCount)
+  const rows = trackLen(bands.length, tight)
+  const cols = trackLen(maxCount, tight)
   const nodes = bands.flatMap((band, r) => {
-    const offset = startOffset(cols, band.length)
-    return band.map((seed, i) => withCell(seed, [offset + 2 * i, 2 * r]))
+    const offset = startOffset(cols, band.length, tight)
+    return band.map((seed, i) => withCell(seed, [offset + step * i, step * r]))
   })
-  return { grid: { cols, rows, ...opts }, nodes }
+  return { grid: { cols, rows, ...gridOpts }, nodes }
 }
 
 /** A single straight line of nodes. `vertical` (default) stacks top→bottom. */

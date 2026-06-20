@@ -11,6 +11,10 @@
   text-align: center;
   backdrop-filter: blur(2px);
   box-shadow: 0 0 18px -6px var(--node-color, #9aa3b2);
+  /* The grid sizes a node's box from its cell, not its text — so clip any label
+     that's still wider/taller than the box it was given (a safety net; prefer
+     widening the cell, e.g. `tight`, or shortening the label). */
+  overflow: hidden;
 }
 
 /* 'term' nodes are filled chips whose text IS the concept. */

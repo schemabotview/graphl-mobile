@@ -17,13 +17,16 @@ import { BLUE, GREEN, ORANGE, PURPLE, RED, TEAL } from '../colors.ts'
 // Catalyst's four optimizer plans, side-by-side inside its box.
 const catalyst = container(
   { id: 'catalyst', label: 'Catalyst Optimizer', color: PURPLE },
-  rows([[
-    { id: 'ulp', label: 'Unresolved', color: BLUE, kind: 'term' },
-    { id: 'logical', label: 'Logical', color: BLUE, kind: 'term' },
-    { id: 'optimized', label: 'Optimized', color: BLUE, kind: 'term' },
-    { id: 'physical', label: 'Physical', color: BLUE, kind: 'term' },
-  ]]),
-  { padding: 0.25 },
+  rows(
+    [[
+      { id: 'ulp', label: 'Unresolved', color: BLUE, kind: 'term' },
+      { id: 'logical', label: 'Logical', color: BLUE, kind: 'term' },
+      { id: 'optimized', label: 'Optimized', color: BLUE, kind: 'term' },
+      { id: 'physical', label: 'Physical', color: BLUE, kind: 'term' },
+    ]],
+    { tight: true },
+  ),
+  { padding: 0.2 },
 )
 
 // A stage = two parallel tasks stacked vertically inside its own box.
