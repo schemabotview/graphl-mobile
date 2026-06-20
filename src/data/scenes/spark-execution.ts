@@ -47,6 +47,24 @@ const dag = container(
   { padding: 0.12 },
 )
 
+// Cluster Manager ⊃ its deployment backends, shown side-by-side inside its box
+// (same shape as Catalyst above). The container keeps id 'cluster' so the
+// tasksched→cluster and cluster→executor edges attach to the box unchanged.
+const clusterManager = container(
+  { id: 'cluster', label: 'Cluster Manager', color: PURPLE, sub: 'allocates executors' },
+  rows(
+    [[
+      { id: 'cm-local', label: 'Local', color: TEAL, kind: 'term' },
+      { id: 'cm-standalone', label: 'Standalone', color: TEAL, kind: 'term' },
+      { id: 'cm-yarn', label: 'YARN', color: TEAL, kind: 'term' },
+      { id: 'cm-k8s', label: 'Kubernetes', color: TEAL, kind: 'term' },
+      { id: 'cm-databricks', label: 'Databricks', color: TEAL, kind: 'term' },
+    ]],
+    { tight: true },
+  ),
+  { padding: 0.2 },
+)
+
 // Two executors run the dispatched tasks in parallel.
 const executors = group(
   'executors',
@@ -62,9 +80,9 @@ const layout = stack(
     { node: { id: 'driver', label: 'Driver', color: ORANGE, kind: 'symbol', sub: 'runs your code' } },
     { node: catalyst, rows: 2 },
     { node: { id: 'tungsten', label: 'Tungsten', color: PURPLE, kind: 'symbol', sub: 'code gen + memory' } },
-    { node: dag, rows: 4 },
+    { node: dag, rows: 3 },
     { node: { id: 'tasksched', label: 'Task Scheduler', color: ORANGE, kind: 'term', sub: 'dispatches tasks' } },
-    { node: { id: 'cluster', label: 'Cluster Manager', color: PURPLE, kind: 'symbol', sub: 'allocates executors' } },
+    { node: clusterManager, rows: 2 },
     { node: executors, rows: 2 },
   ],
   { gap: 0.3, padding: 0.5 },
