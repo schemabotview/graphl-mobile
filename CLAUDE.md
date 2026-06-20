@@ -119,7 +119,7 @@ conda run -n chatterbox python scripts/generate_audio.py --topic apache-kafka
 After generating, **commit + push the .wav in the topic repo** so it serves via
 raw. (Large pushes can need to run on a real network, not a sandbox.)
 
-Target length per scene: 25–40s (~65–105 words) — one concept per scene.
+Target length per scene: up to ~5 min (~650–780 words) — cover a concept and its parts in depth.
 Blank lines in a `.tts` become 300 ms pauses, which also pace the node reveals.
 
 ### A/V sync
