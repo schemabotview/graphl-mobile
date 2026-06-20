@@ -40,10 +40,12 @@ const stage = (id: string, label: string) =>
     { padding: 0.25 },
   )
 
-// DAG ⊃ Stages ⊃ Tasks: the two stages sit side-by-side inside the DAG box.
+// DAG ⊃ Stages ⊃ Tasks: the three stages sit side-by-side in one row inside the
+// DAG box, left→right in execution order (a stage runs only after the previous
+// one's shuffle completes — they're sequential, never parallel).
 const dag = container(
   { id: 'dag', label: 'DAG Scheduler', color: ORANGE, sub: 'the job, split into stages' },
-  rows([[stage('stage1', 'Stage 1'), stage('stage2', 'Stage 2')]]),
+  rows([[stage('stage1', 'Stage 1'), stage('stage2', 'Stage 2'), stage('stage3', 'Stage 3')]]),
   { padding: 0.12 },
 )
 
@@ -99,6 +101,7 @@ export const sparkExecution: SceneSpec = {
     { from: 'catalyst', to: 'tungsten' },
     { from: 'tungsten', to: 'dag' },
     { from: 'stage1', to: 'stage2' },
+    { from: 'stage2', to: 'stage3' },
     { from: 'dag', to: 'tasksched' },
     { from: 'tasksched', to: 'cluster' },
     { from: 'cluster', to: 'ex1' },
