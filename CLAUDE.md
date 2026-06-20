@@ -27,7 +27,7 @@ In-repo imports use explicit `.ts`/`.tsx` extensions — match this.
 Feed (vertical snap-scroll)
  └─ SceneCard (one full-viewport reel; IntersectionObserver → active)
      ├─ SceneCanvas (React Flow: builds nodes/edges from a SceneSpec)
-     │   ├─ SceneNode  (custom node: 'symbol' | 'term', framer-motion entrance)
+     │   ├─ SceneNode  (custom node: 'symbol'|'term'|'container'|'group')
      │   └─ FlowEdge   (bezier + <animateMotion> dot = "flow in path")
      └─ <audio>        (narration; plays when active + unmuted)
 ```
@@ -46,6 +46,48 @@ emit it later (see Roadmap). Add a scene by creating
 
 Scene flow direction is inferred: `grid.cols > grid.rows` ⇒ horizontal handle
 placement (left→right), else vertical (top→bottom).
+
+### Layout: nested grid + pattern helpers
+
+`resolveGrid` (`src/data/layout/grid.ts`) is **recursive** (ported from NodeMap's
+`layoutChildren`). Top-level nodes are placed on the scene grid; a node with
+`children` + `layout` has those children resolved **inside its own pixel box**, so
+containment is exact — a child can never drift onto the scene grid. `container`
+nodes reserve a title band at the top (`TITLE_BAND`/`TITLE_CAP`) so children clear
+the label; `group` nodes are invisible wrappers (no chrome) that only sub-arrange.
+
+> The grid owns spacing/alignment **between** boxes — don't hand-tune padding
+> there. It does **not** know whether a label fits **inside** its box (it never
+> measures text); that's typography. `scene.css` clips overflow and wraps long
+> labels as a safety net — prefer widening the cell (`tight`, below) or a shorter
+> label.
+
+Authoring is **dev-validated**: `resolveGrid` calls `validateLayout` (DEV only),
+which warns in the console on cells that run off their grid or two peers that
+overlap — per level, since children live in their parent's sub-grid. Place cells
+freely and let the console catch mistakes.
+
+Don't hand-count cells — compose with the helpers in `src/data/layout/patterns.ts`.
+Each returns a `PatternResult` (`{ grid, nodes }`) you spread into a `SceneSpec`
+(`...layout`), or feed to `container`/`group`/`stack` to nest:
+
+- `rows(bands)` / `columns(stages)` — siblings in horizontal bands / vertical
+  columns; shorter groups auto-center; nodes stay compact 1×1 chips with gap
+  lanes between them. Pass `{ tight: true }` to drop the gap lanes (≈2× chip
+  width) when labels are long.
+- `pipeline(seeds, axis?)` — one straight line. `fanOut(source, targets, axis?)`
+  — one node into many. `hubSpoke(hub, spokes)` — center + ring.
+- `container(meta, content, opts?)` — wrap a result as a titled box whose
+  `children` lay out inside it. `group(id, content, opts?)` — same, invisible.
+- `stack(bands, opts?)` — arrange nodes vertically into one grid (`rows` per band
+  = proportional height; wrappers fill width, leaves center). Returns a
+  `PatternResult`, so it nests: a `stack` of `container`s wrapped as another
+  `container`'s content gives DAG ⊃ Stage ⊃ Task.
+
+`src/data/scenes/kafka-topics.ts` (flat `columns`) and `spark-execution.ts`
+(nested `container`/`stack`/`rows`/`columns`) are the worked references. Direction
+is just which helper you reach for — `rows`/`stack` for top→down, `columns` for
+left→right.
 
 ### Audio / content convention (decoupled from the app)
 
