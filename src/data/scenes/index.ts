@@ -9,6 +9,7 @@ import { sparkReadingSources } from './spark-reading-sources.ts'
 import { sparkWritingSinks } from './spark-writing-sinks.ts'
 import { sparkCachePersist } from './spark-cache-persist.ts'
 import { sparkPerformanceTuning } from './spark-performance-tuning.ts'
+import { sparkStructuredStreaming } from './spark-structured-streaming.ts'
 import { sparkExecution } from './spark-execution.ts'
 
 // The feed order. Add new scenes here.
@@ -24,4 +25,5 @@ export const scenes: SceneSpec[] = [
   sparkCachePersist,
   sparkPerformanceTuning,
   sparkExecution,
+  sparkStructuredStreaming,
 ]
