@@ -55,6 +55,16 @@
   font-weight: 600;
   line-height: 1.15;
   color: #f4f5f7;
+  max-width: 100%;
+  /* Wrap long labels, breaking inside a single over-long word as a last resort,
+     so text reflows within the box instead of spilling past its border. */
+  overflow-wrap: anywhere;
+}
+
+/* 'term' chips are often narrow (their text IS the node), so use a slightly
+   smaller monospace size to help labels fit the cell. */
+.scene-node--term .scene-node__label {
+  font-size: 13px;
 }
 
 .scene-node__sub {
