@@ -3,22 +3,30 @@
 // free of rendering concerns. Nodes are placed on a grid by `cell` coordinates
 // (NodeMap convention); the layout engine resolves cells -> pixel positions.
 
-export type NodeKind = 'symbol' | 'term' | 'container'
+export type NodeKind = 'symbol' | 'term' | 'container' | 'group'
 
 export interface SceneNodeSpec {
   id: string
   label: string
-  /** [col, row, colSpan?, rowSpan?] within the scene's grid. */
+  /** [col, row, colSpan?, rowSpan?] within the PARENT's grid (scene grid at top level). */
   cell: [number, number, number?, number?]
   color?: string
   /**
    * 'term' = filled chip whose text IS the concept; 'symbol' = labelled node;
-   * 'container' = titled box that visually groups other nodes placed on top of
-   * it (its label sits at the top so children can occupy the body).
+   * 'container' = titled box whose `children` are laid out INSIDE its box (a
+   * title band is reserved at the top); 'group' = an invisible container (no
+   * chrome/label) used only to sub-arrange its children.
    */
   kind?: NodeKind
   /** Optional smaller caption under the label. */
   sub?: string
+  /**
+   * Inner grid for this node's `children`. Children are resolved relative to
+   * this node's pixel box (NodeMap-style nesting), so containment is exact.
+   */
+  layout?: SceneGrid
+  /** Child nodes laid out inside this node's box via `layout`. */
+  children?: SceneNodeSpec[]
 }
 
 export interface SceneEdgeSpec {

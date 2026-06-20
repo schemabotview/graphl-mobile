@@ -7,7 +7,7 @@ import {
   type Node,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import type { SceneSpec } from '../../types/scene.ts'
+import type { SceneNodeSpec, SceneSpec } from '../../types/scene.ts'
 import { resolveGrid } from '../../data/layout/grid.ts'
 import { GRAY } from '../../data/colors.ts'
 import { SceneNode, type SceneNodeData } from './SceneNode.tsx'
@@ -17,6 +17,16 @@ import './scene.css'
 const nodeTypes = { scene: SceneNode }
 const edgeTypes = { flow: FlowEdge }
 
+/** Flatten the scene tree, parent before each of its children (depth-first). */
+function flattenNodes(nodes: SceneNodeSpec[]): SceneNodeSpec[] {
+  const out: SceneNodeSpec[] = []
+  for (const n of nodes) {
+    out.push(n)
+    if (n.children?.length) out.push(...flattenNodes(n.children))
+  }
+  return out
+}
+
 // Virtual portrait canvas; React Flow's fitView scales it to the real viewport.
 const CANVAS = { width: 800, height: 1200 }
 
@@ -25,7 +35,10 @@ export function SceneCanvas({ scene, active }: { scene: SceneSpec; active: boole
 
   const nodes = useMemo<Node<SceneNodeData>[]>(() => {
     const boxes = resolveGrid(scene.nodes, scene.grid, CANVAS)
-    return scene.nodes.map((n, i) => {
+    // Depth-first, parent before child: React Flow paints in array order, so
+    // containers land behind the children resolved inside them.
+    const flat = flattenNodes(scene.nodes)
+    return flat.map((n, i) => {
       const box = boxes[n.id]
       return {
         id: n.id,

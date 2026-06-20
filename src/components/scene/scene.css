@@ -29,6 +29,16 @@
   box-shadow: none;
 }
 
+/* 'group' nodes are invisible containers — they only sub-arrange their
+   children, contributing no border, fill, label, or shadow of their own. */
+.scene-node--group {
+  border: none;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding: 0;
+}
+
 .scene-node--container .scene-node__label {
   font-size: 13px;
   letter-spacing: 0.04em;
