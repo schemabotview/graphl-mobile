@@ -16,6 +16,7 @@ import { sparkWatermarking } from './spark-watermarking.ts'
 import { scalaExecutionModel } from './scala-execution-model.ts'
 import { scalaBindings } from './scala-bindings.ts'
 import { scalaControlFlow } from './scala-control-flow.ts'
+import { scalaOop } from './scala-oop.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -36,4 +37,5 @@ export const scenes: SceneSpec[] = [
   scalaExecutionModel,
   scalaBindings,
   scalaControlFlow,
+  scalaOop,
 ]
