@@ -13,6 +13,7 @@ import { sparkStructuredStreaming } from './spark-structured-streaming.ts'
 import { sparkExecution } from './spark-execution.ts'
 import { sparkWindowing } from './spark-windowing.ts'
 import { sparkWatermarking } from './spark-watermarking.ts'
+import { scalaExecutionModel } from './scala-execution-model.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -30,4 +31,5 @@ export const scenes: SceneSpec[] = [
   sparkStructuredStreaming,
   sparkWindowing,
   sparkWatermarking,
+  scalaExecutionModel,
 ]

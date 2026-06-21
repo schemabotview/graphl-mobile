@@ -3,7 +3,7 @@
 // landing page automatically as soon as their first reel is registered.
 
 import { scenes } from './scenes/index.ts'
-import { BLUE, ORANGE, GRAY } from './colors.ts'
+import { BLUE, ORANGE, RED, GRAY } from './colors.ts'
 
 export interface TopicMeta {
   label: string
@@ -29,6 +29,11 @@ const TOPIC_META: Record<string, TopicMeta> = {
     label: 'Apache Kafka',
     accent: BLUE,
     blurb: 'Distributed event streaming',
+  },
+  scala: {
+    label: 'Scala',
+    accent: RED,
+    blurb: 'Functional + OOP on the JVM',
   },
 }
 
