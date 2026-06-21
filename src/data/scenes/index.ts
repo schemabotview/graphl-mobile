@@ -19,6 +19,7 @@ import { scalaControlFlow } from './scala-control-flow.ts'
 import { scalaOop } from './scala-oop.ts'
 import { scalaEncapsulationPolymorphism } from './scala-encapsulation-polymorphism.ts'
 import { scalaObjects } from './scala-objects.ts'
+import { scalaFunctional } from './scala-functional.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -42,4 +43,5 @@ export const scenes: SceneSpec[] = [
   scalaOop,
   scalaEncapsulationPolymorphism,
   scalaObjects,
+  scalaFunctional,
 ]
