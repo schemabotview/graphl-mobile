@@ -122,6 +122,15 @@
   background: transparent;
 }
 
+/* Edges render in an SVG layer that paints BELOW the nodes layer (nodes default
+   to z-index 0; the edges svg has none). So any edge routing under a filled
+   container/node gets occluded. Our scenes are non-interactive, so lift the
+   whole edges layer above the nodes — connections and their flow dots stay
+   visible across every reel. */
+.react-flow .react-flow__edges {
+  z-index: 3;
+}
+
 /* React Flow defaults the pane to `touch-action: none`, which swallows the
    vertical swipe before it reaches the feed's scroll-snap container. The scene
    is non-interactive (no pan/zoom), so let vertical scroll gestures pass. */
