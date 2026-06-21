@@ -51,6 +51,7 @@ export function SceneCanvas({ scene, active }: { scene: SceneSpec; active: boole
           sub: n.sub,
           color: n.color ?? GRAY,
           kind: n.kind ?? 'symbol',
+          lang: n.lang,
           direction,
           index: i,
           active,

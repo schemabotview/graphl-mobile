@@ -3,7 +3,7 @@
 // free of rendering concerns. Nodes are placed on a grid by `cell` coordinates
 // (NodeMap convention); the layout engine resolves cells -> pixel positions.
 
-export type NodeKind = 'symbol' | 'term' | 'container' | 'group'
+export type NodeKind = 'symbol' | 'term' | 'container' | 'group' | 'code'
 
 export interface SceneNodeSpec {
   id: string
@@ -20,6 +20,8 @@ export interface SceneNodeSpec {
   kind?: NodeKind
   /** Optional smaller caption under the label. */
   sub?: string
+  /** For `kind: 'code'`: the highlight.js language (defaults to 'scala'). */
+  lang?: string
   /**
    * Inner grid for this node's `children`. Children are resolved relative to
    * this node's pixel box (NodeMap-style nesting), so containment is exact.

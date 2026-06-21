@@ -201,7 +201,7 @@ export function stack(bands: StackBand[], opts: PatternOpts & { cols?: number } 
   const nodes: SceneNodeSpec[] = []
   let row = 0
   for (const { node, rows: span = 1 } of bands) {
-    const fills = node.kind === 'container' || node.kind === 'group'
+    const fills = node.kind === 'container' || node.kind === 'group' || node.kind === 'code'
     const cell: SceneNodeSpec['cell'] = fills ? [0, row, cols, span] : [center, row, 1, span]
     nodes.push({ ...node, cell })
     row += span

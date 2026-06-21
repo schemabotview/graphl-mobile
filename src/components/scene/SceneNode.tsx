@@ -2,12 +2,15 @@ import { Handle, Position, type NodeProps } from '@xyflow/react'
 import { motion } from 'framer-motion'
 import { GRAY } from '../../data/colors.ts'
 import type { NodeKind } from '../../types/scene.ts'
+import { highlightCode } from '../../data/highlight.ts'
 
 export interface SceneNodeData {
   label: string
   sub?: string
   color: string
   kind: NodeKind
+  /** For `kind: 'code'`: highlight.js language (defaults to 'scala'). */
+  lang?: string
   /** Dominant flow direction of the scene, sets handle placement. */
   direction: 'horizontal' | 'vertical'
   /** Stagger order for the entrance animation. */
@@ -39,8 +42,22 @@ export function SceneNode({ data }: NodeProps) {
       transition={{ delay: d.active ? d.index * 0.18 : 0, duration: 0.4, ease: 'easeOut' }}
     >
       <Handle type="target" position={targetPos} className="scene-handle" isConnectable={false} />
-      {d.kind !== 'group' && <span className="scene-node__label">{d.label}</span>}
-      {d.kind !== 'group' && d.sub && <span className="scene-node__sub">{d.sub}</span>}
+      {d.kind === 'code' ? (
+        <>
+          <pre className="scene-node__code">
+            <code
+              className="hljs"
+              dangerouslySetInnerHTML={{ __html: highlightCode(d.label, d.lang) }}
+            />
+          </pre>
+          {d.sub && <span className="scene-node__sub">{d.sub}</span>}
+        </>
+      ) : (
+        <>
+          {d.kind !== 'group' && <span className="scene-node__label">{d.label}</span>}
+          {d.kind !== 'group' && d.sub && <span className="scene-node__sub">{d.sub}</span>}
+        </>
+      )}
       <Handle type="source" position={sourcePos} className="scene-handle" isConnectable={false} />
       {/* Extra side handles (id'd) for loop/feedback edges; the id-less handles
           above stay the default for normal flow edges. */}

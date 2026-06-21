@@ -72,6 +72,43 @@
   color: var(--muted, #9aa3b2);
 }
 
+/* 'code' nodes display syntax-highlighted Scala snippets with an IDE look.
+   Left border accent = the node color; background is near-black like VS Code. */
+.scene-node--code {
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #0d1117;
+  border-width: 0 0 0 3px;
+  border-style: solid;
+  border-color: var(--node-color, #9aa3b2);
+  border-radius: 8px;
+  box-shadow: 0 0 14px -4px var(--node-color, #9aa3b2);
+  padding: 10px 14px;
+  gap: 6px;
+}
+
+.scene-node__code {
+  margin: 0;
+  font-family: ui-monospace, 'SF Mono', Menlo, 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  /* Keep indentation but let an over-long line wrap instead of clipping. */
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Token colors come from highlight.js/styles/atom-one-dark.css (imported in
+   src/data/highlight.ts). Neutralize that theme's own block chrome so the node's
+   #0d1117 background and our <pre> layout win. */
+.scene-node__code .hljs {
+  background: transparent;
+  padding: 0;
+  display: inline;
+}
+
 /* Handles are anchor points only; hide the visible dots. */
 .scene-handle {
   opacity: 0;
