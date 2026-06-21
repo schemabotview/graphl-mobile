@@ -12,6 +12,7 @@ import { sparkPerformanceTuning } from './spark-performance-tuning.ts'
 import { sparkStructuredStreaming } from './spark-structured-streaming.ts'
 import { sparkExecution } from './spark-execution.ts'
 import { sparkWindowing } from './spark-windowing.ts'
+import { sparkWatermarking } from './spark-watermarking.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -28,4 +29,5 @@ export const scenes: SceneSpec[] = [
   sparkPerformanceTuning,
   sparkStructuredStreaming,
   sparkWindowing,
+  sparkWatermarking,
 ]
