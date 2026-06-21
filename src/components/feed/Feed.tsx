@@ -168,28 +168,29 @@ export function Feed({ topic, target }: FeedProps) {
         </div>
       )}
 
-      {unmuted && (
-        <button
-          type="button"
-          className="feed__playstate"
-          aria-label={paused ? 'Play' : 'Pause'}
-          onClick={(e) => {
-            // Don't let the click also bubble to the feed's toggle.
-            e.stopPropagation()
-            setPaused((p) => !p)
-          }}
-        >
-          {paused ? (
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
-              <path d="M8 5v14l11-7z" fill="currentColor" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
-              <path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" />
-            </svg>
-          )}
-        </button>
-      )}
+      <button
+        type="button"
+        className="feed__playstate"
+        aria-label={!unmuted || paused ? 'Play' : 'Pause'}
+        onClick={(e) => {
+          // Don't let the click also bubble to the feed's toggle.
+          e.stopPropagation()
+          // Before the first gesture the button unlocks sound; afterwards it
+          // toggles play/pause on the active scene.
+          if (!unmuted) setUnmuted(true)
+          else setPaused((p) => !p)
+        }}
+      >
+        {!unmuted || paused ? (
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
+            <path d="M8 5v14l11-7z" fill="currentColor" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
+            <path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" />
+          </svg>
+        )}
+      </button>
     </div>
   )
 }
