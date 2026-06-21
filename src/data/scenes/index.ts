@@ -14,6 +14,7 @@ import { sparkExecution } from './spark-execution.ts'
 import { sparkWindowing } from './spark-windowing.ts'
 import { sparkWatermarking } from './spark-watermarking.ts'
 import { scalaExecutionModel } from './scala-execution-model.ts'
+import { scalaBindings } from './scala-bindings.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -32,4 +33,5 @@ export const scenes: SceneSpec[] = [
   sparkWindowing,
   sparkWatermarking,
   scalaExecutionModel,
+  scalaBindings,
 ]
