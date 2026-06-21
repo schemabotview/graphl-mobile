@@ -17,6 +17,7 @@ import { scalaExecutionModel } from './scala-execution-model.ts'
 import { scalaBindings } from './scala-bindings.ts'
 import { scalaControlFlow } from './scala-control-flow.ts'
 import { scalaOop } from './scala-oop.ts'
+import { scalaEncapsulationPolymorphism } from './scala-encapsulation-polymorphism.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -38,4 +39,5 @@ export const scenes: SceneSpec[] = [
   scalaBindings,
   scalaControlFlow,
   scalaOop,
+  scalaEncapsulationPolymorphism,
 ]
