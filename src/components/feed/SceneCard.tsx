@@ -9,13 +9,20 @@ interface SceneCardProps {
   unmuted: boolean
   /** Global play/pause toggle driven by taps on the feed; persists across scrolls. */
   paused: boolean
+  /** Hands this card's DOM node to the feed so it can scroll to a deep-linked reel. */
+  innerRef?: (el: HTMLElement | null) => void
+  /** Fires when this card scrolls into view, so the feed can track the current reel. */
+  onActivate?: () => void
 }
 
 // One full-viewport reel. Becomes "active" when scrolled into view; activation
 // (re)plays the entrance animation and, if unmuted, the narration audio.
 // Loose sync: visuals run their own timeline, audio just plays alongside.
-export function SceneCard({ scene, unmuted, paused }: SceneCardProps) {
-  const cardRef = useRef<HTMLElement>(null)
+export function SceneCard({ scene, unmuted, paused, innerRef, onActivate }: SceneCardProps) {
+  const cardRef = useRef<HTMLElement | null>(null)
+  // Keep the latest onActivate readable from the (once-attached) observer.
+  const onActivateRef = useRef(onActivate)
+  onActivateRef.current = onActivate
   const audioRef = useRef<HTMLAudioElement>(null)
   const [active, setActive] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -26,7 +33,11 @@ export function SceneCard({ scene, unmuted, paused }: SceneCardProps) {
     const el = cardRef.current
     if (!el) return
     const io = new IntersectionObserver(
-      ([entry]) => setActive(entry.intersectionRatio >= 0.6),
+      ([entry]) => {
+        const isActive = entry.intersectionRatio >= 0.6
+        setActive(isActive)
+        if (isActive) onActivateRef.current?.()
+      },
       { threshold: [0, 0.6, 1] },
     )
     io.observe(el)
@@ -63,7 +74,13 @@ export function SceneCard({ scene, unmuted, paused }: SceneCardProps) {
   }, [active])
 
   return (
-    <section ref={cardRef} className="scene-card">
+    <section
+      ref={(el) => {
+        cardRef.current = el
+        innerRef?.(el)
+      }}
+      className="scene-card"
+    >
       <SceneCanvas scene={scene} active={active} />
 
       <div className="scene-card__overlay">
