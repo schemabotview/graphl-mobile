@@ -23,6 +23,7 @@ import { scalaFunctional } from './scala-functional.ts'
 import { scalaCollections } from './scala-collections.ts'
 import { scalaErrorHandling } from './scala-error-handling.ts'
 import { scalaConcurrency } from './scala-concurrency.ts'
+import { scalaTypes } from './scala-types.ts'
 
 // The feed order. Add new scenes here.
 export const scenes: SceneSpec[] = [
@@ -50,4 +51,5 @@ export const scenes: SceneSpec[] = [
   scalaCollections,
   scalaErrorHandling,
   scalaConcurrency,
+  scalaTypes,
 ]
